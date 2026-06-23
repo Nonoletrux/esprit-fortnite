@@ -27,8 +27,69 @@
 
         .subtitle {
             color: #888;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-size: 1.1rem;
+        }
+
+        /* --- Zone de Connexion Firebase --- */
+        .auth-container {
+            background: #1e1e24;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            max-width: 1000px;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #333;
+        }
+
+        .auth-inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .auth-inputs input {
+            background: #121214;
+            border: 1px solid #444;
+            padding: 8px 12px;
+            color: white;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .auth-buttons button {
+            background: #00bcff;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .auth-buttons button:hover {
+            background: #009cd3;
+        }
+
+        .auth-buttons .btn-secondary {
+            background: #444;
+            margin-left: 5px;
+        }
+
+        .auth-buttons .btn-secondary:hover {
+            background: #555;
+        }
+
+        .user-logged {
+            display: none;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
         }
 
         /* --- Conteneur global de la Checklist --- */
@@ -75,6 +136,14 @@
         @media (max-width: 650px) {
             .sprite-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .auth-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .auth-inputs {
+                flex-direction: column;
+                width: 100%;
             }
         }
 
@@ -141,6 +210,25 @@
 
     <h1>Sprite Checklist</h1>
     <div class="subtitle">Complète ta collection du Chapitre 7 - Saison 3</div>
+
+    <div class="auth-container">
+        <div id="auth-logged-out" style="display: flex; width: 100%; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div class="auth-inputs">
+                <input type="email" id="auth-email" placeholder="Adresse e-mail">
+                <input type="password" id="auth-password" placeholder="Mot de passe">
+            </div>
+            <div class="auth-buttons">
+                <button id="btn-login">Se connecter</button>
+                <button id="btn-signup" class="btn-secondary">S'inscrire</button>
+            </div>
+        </div>
+        <div id="auth-logged-in" class="user-logged">
+            <span id="user-email-display">Connecté en tant que : exemple@mail.com</span>
+            <div class="auth-buttons">
+                <button id="btn-logout" class="btn-secondary">Déconnexion</button>
+            </div>
+        </div>
+    </div>
 
     <div class="checklist-container">
 
@@ -252,25 +340,107 @@
         </div>
 
     </div>
-    <script>
-        // Dès que la page a fini de charger
-        document.addEventListener('DOMContentLoaded', () => {
-            const checkboxes = document.querySelectorAll('.sprite-checkbox');
 
-            // 1. Charger l'état sauvegardé au démarrage
-            checkboxes.forEach(checkbox => {
-                // On regarde dans le navigateur si la case était cochée
-                const savedState = localStorage.getItem(checkbox.id);
-                if (savedState === 'true') {
-                    checkbox.checked = true;
-                }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-                // 2. Écouter les clics pour sauvegarder les changements
-                checkbox.addListener = checkbox.addEventListener('change', (e) => {
-                    localStorage.setItem(checkbox.id, e.target.checked);
+        // Ta configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC1xr1uOnyTMRqKja5jMRfQLh79dvbFyJY",
+            authDomain: "esprit-fortnite.firebaseapp.com",
+            databaseURL: "https://esprit-fortnite-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "esprit-fortnite",
+            storageBucket: "esprit-fortnite.firebasestorage.app",
+            messagingSenderId: "281977160900",
+            appId: "1:281977160900:web:957f663f5ab9dee131b591",
+            measurementId: "G-N3167ZXX0T"
+        };
+
+        // Initialisation
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        let currentUser = null;
+        const checkboxes = document.querySelectorAll('.sprite-checkbox');
+
+        // --- GESTION DE LA CONNEXION ---
+        const loggedOutDiv = document.getElementById('auth-logged-out');
+        const loggedInDiv = document.getElementById('auth-logged-in');
+        const userEmailDisplay = document.getElementById('user-email-display');
+
+        // Écouter le changement d'état (Connecté / Déconnecté)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loggedOutDiv.style.display = 'none';
+                loggedInDiv.style.display = 'flex';
+                userEmailDisplay.textContent = `Connecté : ${user.email}`;
+                
+                // Charger la liste depuis Firebase dès qu'on se connecte
+                const userDataRef = ref(db, 'users/' + user.uid);
+                get(userDataRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        checkboxes.forEach(cb => {
+                            cb.checked = data[cb.id] || false;
+                        });
+                    } else {
+                        resetCheckboxes();
+                    }
                 });
+            } else {
+                currentUser = null;
+                loggedOutDiv.style.display = 'flex';
+                loggedInDiv.style.display = 'none';
+                resetCheckboxes();
+            }
+        });
+
+        // Bouton Inscription
+        document.getElementById('btn-signup').addEventListener('click', () => {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            if(!email || !password) return alert("Remplis les champs !");
+            
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(() => alert("Compte créé avec succès !"))
+                .catch(err => alert("Erreur : " + err.message));
+        });
+
+        // Bouton Connexion
+        document.getElementById('btn-login').addEventListener('click', () => {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            if(!email || !password) return alert("Remplis les champs !");
+
+            signInWithEmailAndPassword(auth, email, password)
+                .catch(err => alert("Erreur : " + err.message));
+        });
+
+        // Bouton Déconnexion
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // --- GESTION DE LA SAUVEGARDE EN LIGNE ---
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (currentUser) {
+                    // Si connecté, on enregistre dans Firebase sous l'UID de l'utilisateur
+                    set(ref(db, `users/${currentUser.uid}/${checkbox.id}`), checkbox.checked);
+                } else {
+                    alert("Connecte-toi ou crée un compte pour enregistrer tes esprits !");
+                    checkbox.checked = !checkbox.checked; // Annule le clic si non connecté
+                }
             });
         });
+
+        function resetCheckboxes() {
+            checkboxes.forEach(cb => cb.checked = false);
+        }
     </script>
 </body>
 </html>
