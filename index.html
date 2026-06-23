@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortnite Sprite Checklist</title>
+    <style>
+        /* --- Styles Généraux --- */
+        body {
+            background-color: #121214;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            color: #f1c40f;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Conteneur global de la Checklist --- */
+        .checklist-container {
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* --- Ligne par type d'esprit --- */
+        .sprite-row {
+            background: #18181c;
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid #2a2a30;
+        }
+
+        .row-title {
+            font-size: 1.2rem;
+            color: #00bcff;
+            margin-bottom: 15px;
+            text-transform: capitalize;
+            border-left: 4px solid #00bcff;
+            padding-left: 10px;
+        }
+
+        /* --- Grille des Esprits (4 par ligne) --- */
+        .sprite-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        /* Cas particulier pour Burnt Peanut qui est seul */
+        .single-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 220px));
+            justify-content: center;
+        }
+
+        /* Pour les téléphones */
+        @media (max-width: 650px) {
+            .sprite-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* --- Carte Esprit --- */
+        label {
+            cursor: pointer;
+        }
+
+        .sprite-card {
+            background: #1e1e24;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.25s ease;
+            position: relative;
+            user-select: none;
+        }
+
+        .sprite-card:hover {
+            transform: translateY(-3px);
+            border-color: #555;
+        }
+
+        /* Image par défaut (sombre/grisée si non possédée) */
+        .sprite-img {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            filter: grayscale(100%) opacity(40%);
+            transition: all 0.25s ease;
+        }
+
+        .sprite-name {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #888;
+            text-transform: capitalize;
+        }
+
+        /* Cache la checkbox HTML standard */
+        .sprite-checkbox {
+            display: none;
+        }
+
+        /* --- État quand l'Esprit est COCHÉ --- */
+        .sprite-checkbox:checked + .sprite-card {
+            background: #27ae60; 
+            border-color: #2ecc71;
+            box-shadow: 0 0 12px rgba(46, 204, 113, 0.3);
+        }
+
+        .sprite-checkbox:checked + .sprite-card .sprite-img {
+            filter: grayscale(0%) opacity(100%); /* Colore l'image */
+        }
+
+        .sprite-checkbox:checked + .sprite-card .sprite-name {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sprite Checklist</h1>
+    <div class="subtitle">Complète ta collection du Chapitre 7 - Saison 3</div>
+
+    <div class="checklist-container">
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit de l'Eau</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="eau_normal"><div class="sprite-card"><img src="images/eau_normal.png" class="sprite-img"><div class="sprite-name">Eau</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="eau_gold"><div class="sprite-card"><img src="images/eau_gold.png" class="sprite-img"><div class="sprite-name">Eau Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="eau_gummy"><div class="sprite-card"><img src="images/eau_gummy.png" class="sprite-img"><div class="sprite-name">Eau Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="eau_galaxie"><div class="sprite-card"><img src="images/eau_galaxie.png" class="sprite-img"><div class="sprite-name">Eau Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit de la Terre</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="terre_normal"><div class="sprite-card"><img src="images/terre_normal.png" class="sprite-img"><div class="sprite-name">Terre</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="terre_gold"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Terre Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="terre_gummy"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Terre Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="terre_galaxie"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Terre Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit du Feu</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="feu_normal"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Feu</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="feu_gold"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Feu Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="feu_gummy"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Feu Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="feu_galaxie"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Feu Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit Canard</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="canard_normal"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Canard</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="canard_gold"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Canard Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="canard_gummy"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Canard Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="canard_galaxie"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Canard Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit Fantôme</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="fantome_normal"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Fantôme</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="fantome_gold"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Fantôme Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="fantome_gummy"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Fantôme Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="fantome_galaxie"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Fantôme Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit Onirique</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="onirique_normal"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Onirique</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="onirique_gold"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Onirique Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="onirique_gummy"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Onirique Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="onirique_galaxie"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Onirique Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit Démoniaque</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="demoniaque_normal"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Démoniaque</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="demoniaque_gold"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Démoniaque Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="demoniaque_gummy"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Démoniaque Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="demoniaque_galaxie"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Démoniaque Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit Punk</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="punk_normal"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Punk</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="punk_gold"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Punk Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="punk_gummy"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Punk Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="punk_galaxie"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Punk Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit Royale</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="royale_normal"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Royale</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="royale_gold"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Royale Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="royale_gummy"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Royale Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="royale_galaxie"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Royale Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit du Point Zéro</div>
+            <div class="sprite-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="pointzero_normal"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Point Zéro</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="pointzero_gold"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Point Zéro Gold</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="pointzero_gummy"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Point Zéro Gummy</div></div></label>
+                <label><input type="checkbox" class="sprite-checkbox" id="pointzero_galaxie"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Point Zéro Galaxie</div></div></label>
+            </div>
+        </div>
+
+        <div class="sprite-row">
+            <div class="row-title">Esprit Secret</div>
+            <div class="single-grid">
+                <label><input type="checkbox" class="sprite-checkbox" id="burnt_peanut"><div class="sprite-card"><img src="https://via.placeholder.com/75" class="sprite-img"><div class="sprite-name">Burnt Peanut</div></div></label>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
