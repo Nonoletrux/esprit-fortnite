@@ -252,6 +252,25 @@
         </div>
 
     </div>
+    <script>
+        // Dès que la page a fini de charger
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('.sprite-checkbox');
 
+            // 1. Charger l'état sauvegardé au démarrage
+            checkboxes.forEach(checkbox => {
+                // On regarde dans le navigateur si la case était cochée
+                const savedState = localStorage.getItem(checkbox.id);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+
+                // 2. Écouter les clics pour sauvegarder les changements
+                checkbox.addListener = checkbox.addEventListener('change', (e) => {
+                    localStorage.setItem(checkbox.id, e.target.checked);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
